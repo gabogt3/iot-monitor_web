@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Dashboard - Temp/Hum</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>IoT Monitor 🌡️💧</h1>
+        <p id="auth-info">Cargando identidad...</p>
+    </header>
+    <div class="chart-container">
+        <h2>Temperatura y Humedad (Escala de Tiempo)</h2>
+        <canvas id="iotChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/iot-data')
+                .then(response => response.json())
+                .then(result => {
+                    document.getElementById('auth-info').textContent = 
+                        `Autenticado como: ${result.user}`;
+
+                    const data = result.data;
+                    const times = data.map(d => new Date(d.time));
+                    const temperatures = data.map(d => d.temperature.toFixed(2));
+                    const humidities = data.map(d => d.humidity.toFixed(2));
+
+                    const ctx = document.getElementById('iotChart').getContext('2d');
+                    
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: times, // Usamos los objetos Date
+                            datasets: [{
+                                label: 'Temperatura (°C)',
+                                data: temperatures,
+                                borderColor: 'rgb(255, 99, 132)',
+                                tension: 0.3,
+                                fill: false,
+                                yAxisID: 'yTemp'
+                            }, {
+                                label: 'Humedad (%)',
+                                data: humidities,
+                                borderColor: 'rgb(54, 162, 235)',
+                                tension: 0.3,
+                                fill: false,
+                                yAxisID: 'yHum'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                x: {
+                                    type: 'time', // CLAVE: Usa el tipo 'time'
+                                    time: {
+                                        unit: 'hour' // Muestra la escala en horas
+                                    },
+                                    title: {
+                                        display: true,
+                                        text: 'Tiempo'
+                                    }
+                                },
+                                yTemp: {
+                                    type: 'linear',
+                                    position: 'left',
+                                    title: { display: true, text: 'Temperatura (°C)' },
+                                    grid: { drawOnChartArea: true }
+                                },
+                                yHum: {
+                                    type: 'linear',
+                                    position: 'right',
+                                    title: { display: true, text: 'Humedad (%)' },
+                                    grid: { drawOnChartArea: false } // No dibujar grilla para evitar saturación
+                                }
+                            }
+                        }
+                    });
+                })
+                .catch(error => console.error('Error al obtener los datos:', error));
+        });
+    </script>
+</body>
+</html>
