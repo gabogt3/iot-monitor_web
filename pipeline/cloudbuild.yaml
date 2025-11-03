@@ -39,14 +39,14 @@ steps:
       - '-c'
       - |
         # Definir la variable de la imagen completa para la sustitución
-        FULL_IMAGE_NAME="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}"
+        image_name="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}"
         
         # Usar 'sed' para reemplazar los placeholders
         # Reemplazar el nombre del servicio
         sed -i "s/__SERVICE_NAME__/${_SERVICE_NAME}/g" pipeline/service.yaml
         
         # Reemplazar el nombre completo de la imagen
-        sed -i "s|__FULL_IMAGE_NAME__|${FULL_IMAGE_NAME}|g" pipeline/service.yaml
+        sed -i "s|__FULL_IMAGE_NAME__|$image_name|g" pipeline/service.yaml
 
         cat pipeline/service.yaml
         
