@@ -1,0 +1,27 @@
+# service.yaml
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: iot-monitor_web # Nombre de tu servicio en Cloud Run
+spec:
+  template:
+    metadata:
+      annotations:
+        # Habilita Identity-Aware Proxy (IAP) para el servicio
+        # El valor 'all' significa que solo el tráfico autorizado por IAP es permitido.
+        run.googleapis.com/ingress: all
+    spec:
+      containers:
+      - image: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO_NAME}/iot-monitor_web-img:${_TAG_NAME}
+        resources:
+          limits:
+            # Recursos de CPU y Memoria (0.25 vCPU y 512 MiB de RAM)
+            cpu: 250m
+            memory: 512Mi
+        ports:
+        - containerPort: 8080 # Puerto que escucha tu aplicación Node.js
+      # Configuración de escalado
+      scale:
+        minInstanceCount: 0 # Escala a cero para ahorrar costos
+        maxInstanceCount: 2 # Máximo 3 instancias
+      timeoutSeconds: 300 # Tiempo de espera para la solicitud (opcional)
