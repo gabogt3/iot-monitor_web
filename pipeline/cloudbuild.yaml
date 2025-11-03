@@ -57,7 +57,8 @@ steps:
     id: deploy-service
     args:
       - 'run'
-      - 'deploy'
+      - 'services'
+      - 'replace'
       - 'pipeline/service.yaml'
       - '--region=${_REGION}'
       - '--platform=managed'
