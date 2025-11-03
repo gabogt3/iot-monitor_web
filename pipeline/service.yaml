@@ -16,7 +16,7 @@ spec:
     spec:
       serviceAccountName: iot-monitor-web-sa-run@imonitor-miniups.iam.gserviceaccount.com
       containers:
-      - image: __REGION__-docker.pkg.dev/__PROJECT_ID__/__SERVICE_NAME__-repo/__SERVICE_NAME__-img:__TAG_NAME__
+      - image: __FULL_IMAGE_NAME__
         resources:
           limits:
             # Recursos de CPU y Memoria (0.25 vCPU y 512 MiB de RAM)
