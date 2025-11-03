@@ -6,13 +6,13 @@ metadata:
   annotations:
     run.googleapis.com/minScale: '0'
     run.googleapis.com/maxScale: '2'
+    run.googleapis.com/ingress: all # El valor 'all' significa que solo el tráfico autorizado por IAP es permitido.
 spec:
   template:
     metadata:
       annotations:
-        # Habilita Identity-Aware Proxy (IAP) para el servicio
-        # El valor 'all' significa que solo el tráfico autorizado por IAP es permitido.
-        run.googleapis.com/ingress: all
+        autoscaling.knative.dev/minScale: "0" # Propiedad de la Revisión
+        autoscaling.knative.dev/maxScale: "2" # Propiedad de la Revisión
     spec:
       serviceAccountName: iot-monitor-web-sa-run@imonitor-miniups.iam.gserviceaccount.com
       containers:
