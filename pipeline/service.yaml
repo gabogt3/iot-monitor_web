@@ -11,6 +11,7 @@ spec:
         # El valor 'all' significa que solo el tráfico autorizado por IAP es permitido.
         run.googleapis.com/ingress: all
     spec:
+      serviceAccountName: iot-monitor-web-sa-run@imonitor-miniups.iam.gserviceaccount.com
       containers:
       - image: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO_NAME}/iot-monitor_web-img:${_TAG_NAME}
         resources:
