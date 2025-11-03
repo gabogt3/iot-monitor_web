@@ -38,7 +38,7 @@ steps:
       - 'run'
       - 'services'
       - 'replace'
-      - 'service.yaml'
+      - 'pipeline/service.yaml'
       - '--region=${_REGION}'
       - '--platform=managed'
       - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
