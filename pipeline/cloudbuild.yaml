@@ -9,7 +9,7 @@ steps:
         gcloud artifacts repositories describe ${_SERVICE_NAME}-repo \
           --location=${_REGION} \
           --format='value(name)' || \
-        gcloud artifacts repositories create${_SERVICE_NAME}-repo \
+        gcloud artifacts repositories create ${_SERVICE_NAME}-repo \
           --repository-format=docker \
           --location=${_REGION} \
           --description="Repositorio para el dashboard web de IoT Monitor"
