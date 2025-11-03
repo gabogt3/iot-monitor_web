@@ -42,7 +42,8 @@ steps:
       - '--region=${_REGION}'
       - '--platform=managed'
       - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
-
+options:
+  logging: CLOUD_LOGGING_ONLY
 # Definición de variables de entorno/sustitución
 substitutions:
   _SERVICE_NAME: iot-monitor_web
