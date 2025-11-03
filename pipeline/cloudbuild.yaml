@@ -31,21 +31,19 @@ steps:
       - 'push'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
 
-  # PASO 3: Desplegar el servicio en Cloud Run usando el manifiesto (service.yaml).
-  - name: 'gcr.io/cloud-builders/gcloud'
+- name: 'gcr.io/cloud-builders/gcloud'
     id: deploy-service
     args:
       - 'run'
-      - 'services'
-      - 'replace'
-      - 'pipeline/service.yaml'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
       - '--region=${_REGION}'
       - '--platform=managed'
-      #- '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
+      - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
+      - '--config=pipeline/service.yaml'
 options:
   logging: CLOUD_LOGGING_ONLY
-# Definición de variables de entorno/sustitución
 substitutions:
   _SERVICE_NAME: iot-monitor-web
   _TAG_NAME: latest
-  _REGION: us-central1        # Región para el despliegue y el repositorio AR
+  _REGION: us-central1
