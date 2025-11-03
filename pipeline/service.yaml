@@ -2,7 +2,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: iot-monitor_web # Nombre de tu servicio en Cloud Run
+  name: ${_SERVICE_NAME}
 spec:
   template:
     metadata:
@@ -13,7 +13,7 @@ spec:
     spec:
       serviceAccountName: iot-monitor-web-sa-run@imonitor-miniups.iam.gserviceaccount.com
       containers:
-      - image: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_AR_REPO_NAME}/iot-monitor_web-img:${_TAG_NAME}
+      - image: ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}
         resources:
           limits:
             # Recursos de CPU y Memoria (0.25 vCPU y 512 MiB de RAM)
