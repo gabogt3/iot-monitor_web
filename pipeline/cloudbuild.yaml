@@ -47,6 +47,8 @@ steps:
         
         # Reemplazar el nombre completo de la imagen
         sed -i "s|__FULL_IMAGE_NAME__|${FULL_IMAGE_NAME}|g" pipeline/service.yaml
+
+        cat pipeline/service.yaml
         
         echo "Manifiesto YAML listo para despliegue."
         
