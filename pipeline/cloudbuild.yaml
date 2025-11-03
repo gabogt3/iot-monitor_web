@@ -1,0 +1,50 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: check-ar-repo
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      # Crea el repositorio de Artifact Registry si no existe
+      - |
+        gcloud artifacts repositories describe ${_SERVICE_NAME}-repo \
+          --location=${_REGION} \
+          --format='value(name)' || \
+        gcloud artifacts repositories create${_SERVICE_NAME}-repo \
+          --repository-format=docker \
+          --location=${_REGION} \
+          --description="Repositorio para el dashboard web de IoT Monitor"
+
+  # PASO 1: Construir la imagen de Docker.
+  # El nombre completo de la imagen ahora incluye el repositorio AR.
+  - name: 'gcr.io/cloud-builders/docker'
+    id: build-image
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
+      - '.'
+
+  # PASO 2: Subir la imagen a Artifact Registry.
+  - name: 'gcr.io/cloud-builders/docker'
+    id: push-image
+    args:
+      - 'push'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
+
+  # PASO 3: Desplegar el servicio en Cloud Run usando el manifiesto (service.yaml).
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: deploy-service
+    args:
+      - 'run'
+      - 'services'
+      - 'replace'
+      - 'service.yaml'
+      - '--region=${_REGION}'
+      - '--platform=managed'
+      - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
+
+# Definición de variables de entorno/sustitución
+substitutions:
+  _SERVICE_NAME: iot-monitor_web
+  _TAG_NAME: latest
+  _REGION: us-central1        # Región para el despliegue y el repositorio AR
