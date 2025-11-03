@@ -31,16 +31,34 @@ steps:
       - 'push'
       - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
 
+  # PASO 3: Sustituir variables en service.yaml.
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: substitute-vars
+    entrypoint: /bin/bash
+    args:
+      - '-c'
+      - |
+        # Definir la variable de la imagen completa para la sustitución
+        FULL_IMAGE_NAME="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}"
+        
+        # Usar 'sed' para reemplazar los placeholders
+        # Reemplazar el nombre del servicio
+        sed -i "s/__SERVICE_NAME__/${_SERVICE_NAME}/g" pipeline/service.yaml
+        
+        # Reemplazar el nombre completo de la imagen
+        sed -i "s|__FULL_IMAGE_NAME__|${FULL_IMAGE_NAME}|g" pipeline/service.yaml
+        
+        echo "Manifiesto YAML listo para despliegue."
+        
+  # PASO 3: Sustituir variables en service.yaml.
   - name: 'gcr.io/cloud-builders/gcloud'
     id: deploy-service
     args:
       - 'run'
       - 'deploy'
-      - '${_SERVICE_NAME}'
+      - 'pipeline/service.yaml'
       - '--region=${_REGION}'
       - '--platform=managed'
-      - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
-      - '--configuration=pipeline/service.yaml'
 options:
   logging: CLOUD_LOGGING_ONLY
 substitutions:
