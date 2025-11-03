@@ -46,6 +46,6 @@ options:
   logging: CLOUD_LOGGING_ONLY
 # Definición de variables de entorno/sustitución
 substitutions:
-  _SERVICE_NAME: iot-monitor_web
+  _SERVICE_NAME: iot-monitor-web
   _TAG_NAME: latest
   _REGION: us-central1        # Región para el despliegue y el repositorio AR
