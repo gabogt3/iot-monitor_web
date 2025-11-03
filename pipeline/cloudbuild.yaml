@@ -40,7 +40,7 @@ steps:
       - '--region=${_REGION}'
       - '--platform=managed'
       - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
-      - '--config=pipeline/service.yaml'
+      - '--file=pipeline/service.yaml'
 options:
   logging: CLOUD_LOGGING_ONLY
 substitutions:
