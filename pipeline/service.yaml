@@ -3,6 +3,9 @@ apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
   name: ${_SERVICE_NAME}
+      annotations:
+          run.googleapis.com/minScale: '0'
+          run.googleapis.com/maxScale: '2'
 spec:
   template:
     metadata:
@@ -21,8 +24,4 @@ spec:
             memory: 512Mi
         ports:
         - containerPort: 8080 # Puerto que escucha tu aplicación Node.js
-      # Configuración de escalado
-      scale:
-        minInstanceCount: 0 # Escala a cero para ahorrar costos
-        maxInstanceCount: 2 # Máximo 3 instancias
       timeoutSeconds: 300 # Tiempo de espera para la solicitud (opcional)
