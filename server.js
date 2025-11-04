@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
+const path = require('path');
 
 // ====================================================================
 // PASO 1: Middleware para acceder a la identidad de IAP
@@ -18,17 +19,18 @@ app.use((req, res, next) => {
       email: userEmail.replace('accounts.google.com:', ''), // Limpiar el prefijo
       authenticatedBy: 'IAP'
     };
-    console.log(`Usuario autenticado (por IAP): ${req.user.email}`);
+    console.log(`Usuario autenticado (por IAP): ${req.user.email}...`);
   } else {
     // Esto es solo para pruebas locales; en GCP, IAP garantiza este header.
-    console.log('Advertencia: El header de IAP no está presente.');
+    console.log('Advertencia: El header de IAP no está presente...');
     req.user = { email: 'usuario.local@example.com', authenticatedBy: 'Local' };
   }
   next();
 });
 
 // Sirve archivos estáticos (HTML, CSS, JS del frontend)
-app.use(express.static('public'));
+//app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ====================================================================
 // PASO 2: Endpoint para simular la consulta a BigQuery
@@ -60,5 +62,5 @@ app.get('/api/iot-data', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Aplicación IoT escuchando en el puerto ${port}`);
+  console.log(`Aplicación IoT escuchando en el puerto ${port}...`);
 });
