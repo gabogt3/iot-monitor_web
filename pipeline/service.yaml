@@ -7,6 +7,8 @@ metadata:
     run.googleapis.com/minScale: '0'
     run.googleapis.com/maxScale: '2'
     run.googleapis.com/ingress: all # El valor 'all' significa que solo el tráfico autorizado por IAP es permitido.
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/invoker-iam-disabled: 'true'
 spec:
   template:
     metadata:
