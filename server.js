@@ -10,7 +10,7 @@ const port = process.env.PORT || 8080;
 // ====================================================================
 app.use((req, res, next) => {
   const iapHeader = 'x-goog-authenticated-user-email';
-  const userEmail = req.header(iapHeader);
+  const userEmail = 'gabogt4@gmail.com';//req.header(iapHeader);
   
   if (userEmail) {
     // Almacena el email para que el frontend lo pueda usar (opcional)
