@@ -36,12 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Endpoint para simular la consulta a BigQuery
 // ====================================================================
 app.get('/api/iot-data', (req, res) => {
-  // En un entorno real, aquí se consultaría BigQuery:
-  // const { BigQuery } = require('@google-cloud/bigquery');
-  // const bigquery = new BigQuery();
-  // const query = 'SELECT timestamp, temperature, humidity FROM my_iot_data ORDER BY timestamp DESC LIMIT 100';
-  // const [rows] = await bigquery.query({ query });
-  
   // Datos simulados:
   const now = Date.now();
   const data = [];
@@ -112,7 +106,7 @@ app.get('/api/datos-iot', async (req, res) => {
       FROM
         \`${PROJECT_ID}.${DATASET_ID}.${TABLE_ID}\`
       WHERE
-        timestamp BETWEEN TIMESTAMP_SECONDS(@startTime) AND TIMESTAMP_SECONDS(@endTime)
+        timestamp BETWEEN TIMESTAMP_SECONDS(@startTime) AND TIMESTAMP_SECONDS(@endTime) AND valor_float_1 < 1000
       ORDER BY
         timestamp
     `;
