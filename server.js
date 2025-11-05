@@ -98,8 +98,8 @@ app.get('/api/datos-iot', async (req, res) => {
 
 
     // 2. Preparar valores seguros (Conversión a segundos para BigQuery)
-    const startTimeSeconds = startTimeMs / 1000;
-    const endTimeSeconds = endTimeMs / 1000;
+    const startTimeSeconds = Math.floor(startTimeMs / 1000);
+    const endTimeSeconds = Math.floor(endTimeMs / 1000);
     
     // 3. Consulta SQL parametrizada
     // Aunque BigQuery soporta parámetros, la conversión de TIMESTAMP_SECONDS requiere una sintaxis especial.
