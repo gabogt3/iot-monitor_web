@@ -21,7 +21,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:$BUILD_ID'
       - '.'
 
   # PASO 2: Subir la imagen a Artifact Registry.
@@ -29,7 +29,7 @@ steps:
     id: push-image
     args:
       - 'push'
-      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:$BUILD_ID'
 
   # PASO 3: Sustituir variables en service.yaml.
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -39,7 +39,7 @@ steps:
       - '-c'
       - |
         # Definir la variable de la imagen completa para la sustitución
-        image_name="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:${_TAG_NAME}"
+        image_name="${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_SERVICE_NAME}-repo/${_SERVICE_NAME}-img:$BUILD_ID"
         
         # Usar 'sed' para reemplazar los placeholders
         # Reemplazar el nombre del servicio
@@ -66,5 +66,4 @@ options:
   logging: CLOUD_LOGGING_ONLY
 substitutions:
   _SERVICE_NAME: iot-monitor-web
-  _TAG_NAME: latest
   _REGION: us-central1
