@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
 </head>
 <body>
     <header>
@@ -16,10 +17,143 @@
     <div class="chart-container">
         <h2>Temperatura y Humedad (Escala de Tiempo)</h2>
         <canvas id="iotChart"></canvas>
-    </div>
-
+        </div>
+    <div id="time-slider"></div>
+    <p>Rango Seleccionado: <span id="range-start"></span> - <span id="range-end"></span></p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        let iotChart;
+        const slider = document.getElementById('time-slider');
+        const rangeStartSpan = document.getElementById('range-start');
+        const rangeEndSpan = document.getElementById('range-end');
+        const ctx = document.getElementById('iotChart').getContext('2d');
+        
+        const DAY_MS = 24 * 60 * 60 * 1000;
+        const now = Date.now();
+        const past = now - (30 * DAY_MS); // Rango inicial de 30 días
+        
+        // --- 1. FUNCIÓN DE CARGA Y ACTUALIZACIÓN ---
+        async function loadDataAndRefreshChart(startTimeMs, endTimeMs) {
+            // 1. Construir la URL de la API con los parámetros del rango de tiempo
+            const apiUrl = `/api/datos-iot?start=${startTimeMs}&end=${endTimeMs}`;
+        
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                // 2. Preparar los datos para Chart.js
+                const labels = data.map(row => {
+                    // Convierte el timestamp de BigQuery (que viene en un objeto con valor) a un formato legible
+                    return new Date(row.timestamp.value).toLocaleString();
+                });
+                const temperaturaData = data.map(row => row.temperatura);
+                const humedadData = data.map(row => row.humedad);
+        
+                const chartData = {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Temperatura (°C)',
+                            data: temperaturaData,
+                            borderColor: 'rgb(255, 99, 132)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                            yAxisID: 'yTemp',
+                        },
+                        {
+                            label: 'Humedad (%)',
+                            data: humedadData,
+                            borderColor: 'rgb(54, 162, 235)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            yAxisID: 'yHumi',
+                        }
+                    ]
+                };
+        
+                // 3. INICIALIZACIÓN O ACTUALIZACIÓN DEL GRÁFICO
+                if (!iotChart) {
+                    // CREAR GRÁFICO (PRIMERA CARGA)
+                    iotChart = new Chart(ctx, {
+                        type: 'line',
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false, // CLAVE para control de altura por CSS
+                            interaction: {
+                                mode: 'index',
+                                intersect: false,
+                            },
+                            stacked: false,
+                            scales: {
+                                yTemp: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'left',
+                                    title: { display: true, text: 'Temperatura' }
+                                },
+                                yHumi: {
+                                    type: 'linear',
+                                    display: true,
+                                    position: 'right',
+                                    title: { display: true, text: 'Humedad' },
+                                    grid: { drawOnChartArea: false }, // Oculta líneas para no saturar
+                                    min: 0,
+                                    max: 100
+                                }
+                            }
+                        }
+                    });
+                    console.log("Gráfico inicializado.");
+                } else {
+                    // ACTUALIZAR GRÁFICO (CAMBIO DE SLIDER)
+                    iotChart.data.labels = labels;
+                    iotChart.data.datasets[0].data = temperaturaData;
+                    iotChart.data.datasets[1].data = humedadData;
+                    iotChart.update();
+                    console.log(`Gráfico actualizado con ${data.length} puntos.`);
+                }
+        
+            } catch (e) {
+                console.error("Error al cargar datos del API:", e);
+                // Mostrar un mensaje de error en la UI (opcional)
+            }
+        }
+        
+        
+        // --- 2. CONFIGURACIÓN DEL SLIDER Y EVENTOS ---
+        noUiSlider.create(slider, {
+            start: [past, now],
+            connect: true,
+            range: { 'min': past, 'max': now },
+            step: DAY_MS,
+            tooltips: true,
+            pips: { mode: 'count', values: 7, density: 4 }
+        });
+        
+        // Evento 'update' (Muestra el rango seleccionado)
+        slider.noUiSlider.on('update', function (values, handle) {
+            const startDate = new Date(parseInt(values[0]));
+            const endDate = new Date(parseInt(values[1]));
+            rangeStartSpan.textContent = startDate.toLocaleDateString();
+            rangeEndSpan.textContent = endDate.toLocaleDateString();
+        });
+        
+        // Evento 'set' (Llamada al API cuando el usuario suelta el slider)
+        slider.noUiSlider.on('set', function (values, handle) {
+            const startTime = parseInt(values[0]);
+            const endTime = parseInt(values[1]);
+            loadDataAndRefreshChart(startTime, endTime);
+        });
+        
+        // --- 3. INICIALIZACIÓN DE LA PÁGINA ---
+        // Cargar los datos y el gráfico inicial al cargar la página
+        loadDataAndRefreshChart(past, now);
+        
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded1', () => {
             fetch('/api/iot-data')
                 .then(response => response.json())
                 .then(result => {
