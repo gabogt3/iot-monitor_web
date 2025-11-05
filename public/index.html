@@ -136,11 +136,11 @@
                 mark: '.',
                 encoder: function(value) {
                     // Convierte el valor numérico (ms) a un objeto Date
-                    return new Date(value);
+                    return value;//return new Date(value);
                 },
                 decoder: function(value) {
                     // Convierte el texto de vuelta a número (aunque no es estrictamente necesario aquí)
-                    return value.getTime();
+                    return Number(value);//return value.getTime();
                 },
                 // Especifica la función que formateará la salida de texto final (para el tooltip)
                 edit: function(value) {
@@ -153,12 +153,12 @@
         });
         
         // Evento 'update' (Muestra el rango seleccionado)
-        slider.noUiSlider.on('update', function (values, handle) {
-            const startDate = new Date(parseInt(values[0]));
-            const endDate = new Date(parseInt(values[1]));
-            rangeStartSpan.textContent = startDate.toLocaleDateString();
-            rangeEndSpan.textContent = endDate.toLocaleDateString();
-        });
+        //slider.noUiSlider.on('update', function (values, handle) {
+        //    const startDate = new Date(parseInt(values[0]));
+        //    const endDate = new Date(parseInt(values[1]));
+        //    rangeStartSpan.textContent = startDate.toLocaleDateString();
+        //    rangeEndSpan.textContent = endDate.toLocaleDateString();
+        //});
         
         // Evento 'set' (Llamada al API cuando el usuario suelta el slider)
         slider.noUiSlider.on('set', function (values, handle) {
