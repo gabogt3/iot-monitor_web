@@ -19,6 +19,10 @@ header {
     padding: 20px 0;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-image: url('header.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
 
 header h1 {
@@ -50,11 +54,27 @@ header h1 {
     overflow: hidden; 
 }
 
+/* Estilos específicos para la regla del slider */
+#time-slider {
+    /* 1. Relleno interno para separar la regla de los bordes del DIV */
+    padding: 15px 10px; 
+    
+    /* 2. Margen superior/inferior para separarlo de otros elementos */
+    margin: 20px 0; 
+    
+    /* 3. Asegura que la regla tenga una altura visible (ajusta si es necesario) */
+    height: 30px; 
+}
+
 footer {
     padding: 15px;
     text-align: center;
     background-color: #e9ecef;
     color: #6c757d;
     margin-top: 20px;
-    flex-shrink: 0; /* Evita que el footer se encoja */
+    flex-shrink: 0; 
+    background-image: url('footer.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
 }
