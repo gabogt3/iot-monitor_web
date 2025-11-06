@@ -132,11 +132,11 @@
             format: {
                 to: function (value) {
                     // Convierte el número a un formato legible
-                    return new Date(value).toLocaleDateString('es-ES');
+                    return Date.parse(value);
                 },
                 from: function (value) {
                     // Convierte el formato legible de nuevo a número
-                    return Date.parse(value);
+                    return new Date(Number(value)).toLocaleDateString('es-ES');
                 }
             },
             pips: { mode: 'count', values: 5, density: 4 }
