@@ -136,20 +136,23 @@
                 mark: '.',
                 encoder: function(value) {
                     // Convierte el valor numérico (ms) a un objeto Date
-                    return value;//return new Date(value);
+                    var temp1 = new Date(value);
+                    return temp1;
                 },
                 decoder: function(value) {
                     // Convierte el texto de vuelta a número (aunque no es estrictamente necesario aquí)
-                    return new Date(Number(value)).toLocaleString(); //Number(value);//return value.getTime();
+                    var temp2 = new Date(Number(value)).toLocaleString();
+                    return temp2; //Number(value);//return value.getTime();
                 },
                 // Especifica la función que formateará la salida de texto final (para el tooltip)
                 edit: function(value) {
                     // Formatea el objeto Date a una cadena local legible
                     // Usamos toLocaleString() para mostrar fecha y hora
-                    return new Date(Number(value)).toLocaleString(); 
+                    var temp3 = new Date(Number(value)).toLocaleString();
+                    return temp3; 
                 }
             }),
-            pips: { mode: 'count', values: 7, density: 4 }
+            pips: { mode: 'count', values: 5, density: 4 }
         });
         
         // Evento 'update' (Muestra el rango seleccionado)
