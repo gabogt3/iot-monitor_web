@@ -136,7 +136,7 @@
                 },
                 from: function (value) {
                     // Convierte el formato legible de nuevo a número
-                    return new Date(Number(value)).toLocaleDateString('es-ES');
+                    return new Date(Number(value)).toLocaleString();
                 }
             },
             pips: { mode: 'count', values: 5, density: 4 }
