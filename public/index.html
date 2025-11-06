@@ -11,8 +11,7 @@
 </head>
 <body>
     <header>
-        <h1>IoT Monitor 🌡️💧</h1>
-        <p id="auth-info">Cargando identidad...</p>
+        <h1>IoT Monitor 🌡️💧<img src='iotmonitor.jpg'/>></h1>
     </header>
     <div class="chart-container">
         <h2>Temperatura y Humedad (Escala de Tiempo)</h2>
@@ -125,9 +124,9 @@
         
         // --- 2. CONFIGURACIÓN DEL SLIDER Y EVENTOS ---
         noUiSlider.create(slider, {
-            start: [past, now],
+            start: [new Date(past), new Date(now)],
             connect: true,
-            range: { 'min': past, 'max': now },
+            range: { 'min': new Date(past), 'max': new Date(now) },
             step: DAY_MS,
             tooltips: [true, true], // Muestra tooltips para ambos handlers
             format: wNumb({
@@ -141,7 +140,7 @@
                 },
                 decoder: function(value) {
                     // Convierte el texto de vuelta a número (aunque no es estrictamente necesario aquí)
-                    var temp2 = new Date(Number(value)).toLocaleString();
+                    var temp2 = value.getTime();//new Date(Number(value)).toLocaleString();
                     return temp2; //Number(value);//return value.getTime();
                 },
                 // Especifica la función que formateará la salida de texto final (para el tooltip)
