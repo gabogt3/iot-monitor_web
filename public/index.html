@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IoT Dashboard - Temp/Hum</title>
+    <title>IoT Monitor</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
     <link rel="stylesheet" href="style.css">
@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <h1>IoT Monitor 🌡️💧<img src='iotmonitor.jpg'/>></h1>
+        <h1><img src='iotmonitor.jpg'/>></h1>
     </header>
     <div class="chart-container">
         <h2>Temperatura y Humedad (Escala de Tiempo)</h2>
@@ -124,33 +124,21 @@
         
         // --- 2. CONFIGURACIÓN DEL SLIDER Y EVENTOS ---
         noUiSlider.create(slider, {
-            start: [new Date(past), new Date(now)],
+            start: [past, now],
             connect: true,
-            range: { 'min': new Date(past), 'max': new Date(now) },
+            range: { 'min': past, 'max': now },
             step: DAY_MS,
             tooltips: [true, true], // Muestra tooltips para ambos handlers
-            format: wNumb({
-                // Define la función de formato (convierte ms a string de fecha/hora)
-                decimals: 0, // No queremos decimales en el tiempo UNIX
-                mark: '.',
-                encoder: function(value) {
-                    // Convierte el valor numérico (ms) a un objeto Date
-                    var temp1 = new Date(value);
-                    return temp1;
+            format: {
+                to: function (value) {
+                    // Convierte el número a un formato legible
+                    return new Date(value).toLocaleDateString('es-ES');
                 },
-                decoder: function(value) {
-                    // Convierte el texto de vuelta a número (aunque no es estrictamente necesario aquí)
-                    var temp2 = value.getTime();//new Date(Number(value)).toLocaleString();
-                    return temp2; //Number(value);//return value.getTime();
-                },
-                // Especifica la función que formateará la salida de texto final (para el tooltip)
-                edit: function(value) {
-                    // Formatea el objeto Date a una cadena local legible
-                    // Usamos toLocaleString() para mostrar fecha y hora
-                    var temp3 = new Date(Number(value)).toLocaleString();
-                    return temp3; 
+                from: function (value) {
+                    // Convierte el formato legible de nuevo a número
+                    return Date.parse(value);
                 }
-            }),
+            },
             pips: { mode: 'count', values: 5, density: 4 }
         });
         
@@ -247,5 +235,8 @@
                 .catch(error => console.error('Error al obtener los datos:', error));
         });
     </script>
+    <footer>
+        GaboGT4 - 2025
+    </footer>
 </body>
 </html>
