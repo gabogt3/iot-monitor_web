@@ -19,7 +19,7 @@
         </div>
     <div id="time-slider"></div>
     <p>Rango Seleccionado: <span id="range-start"></span> - <span id="range-end"></span></p>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.2.0/wNumb.min.js"></script>
     <script>
         let iotChart;
@@ -128,15 +128,9 @@
             connect: true,
             range: { 'min': past, 'max': now },
             step: DAY_MS,
-            tooltips: [true, true], // Muestra tooltips para ambos handlers
+            tooltips: [false, false], // Muestra tooltips para ambos handlers
             format: {
                 to: function (value) {
-                    // Convierte el número a un formato legible
-                    //return Date.parse(value);
-                    //if ("string" != typeof r){
-                    //    return Date.parse(value);// Convierte el formato legible de nuevo a número
-                    //}
-                    //si viene en formato numberico pasar a fecha
                     return value;//new Date(value).toLocaleString();
                 },
                 from: function (value) {//esta funcion se llama para convertir y reconvertir el valor
@@ -169,8 +163,8 @@
         slider.noUiSlider.on('set', function (values, handle) {
             const startTime = parseInt(values[0]);
             const endTime = parseInt(values[1]);
-            //const startDate = new Date(parseInt(values[0]));
-            //const endDate = new Date(parseInt(values[1]));
+            const startDate = new Date(parseInt(values[0]));
+            const endDate = new Date(parseInt(values[1]));
             
             rangeStartSpan.textContent = startDate.toLocaleString(); 
             rangeEndSpan.textContent = endDate.toLocaleString();     
