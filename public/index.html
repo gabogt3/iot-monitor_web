@@ -132,11 +132,19 @@
             format: {
                 to: function (value) {
                     // Convierte el número a un formato legible
-                    return Date.parse(value);
+                    //return Date.parse(value);
+                    if ("string" != typeof r){
+                        return Date.parse(value);// Convierte el formato legible de nuevo a número
+                    }
+                    //si viene en formato numberico pasar a fecha
+                    return new Date(value).toLocaleString();
                 },
-                from: function (value) {
-                    // Convierte el formato legible de nuevo a número
-                    return new Date(Number(value)).toLocaleString();
+                from: function (value) {//esta funcion se llama para convertir y reconvertir el valor
+                    if ("string" != typeof r){
+                        return Date.parse(value);// Convierte el formato legible de nuevo a número
+                    }
+                    //si viene en formato numberico pasar a fecha
+                    return new Date(value).toLocaleString();
                 }
             },
             pips: { mode: 'count', values: 5, density: 4 }
