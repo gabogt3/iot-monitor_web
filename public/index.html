@@ -133,9 +133,9 @@
                 to: function (value) {
                     // Convierte el número a un formato legible
                     //return Date.parse(value);
-                    if ("string" != typeof r){
-                        return Date.parse(value);// Convierte el formato legible de nuevo a número
-                    }
+                    //if ("string" != typeof r){
+                    //    return Date.parse(value);// Convierte el formato legible de nuevo a número
+                    //}
                     //si viene en formato numberico pasar a fecha
                     return new Date(value).toLocaleString();
                 },
@@ -150,7 +150,11 @@
                     return new Date(value).toLocaleString();
                 }
             },
-            pips: { mode: 'count', values: 5, density: 4, stepped: true }
+            pips: { mode: 'count', values: 5, density: 4, stepped: true, format: {
+                to: function (value) {
+                    valor = new Date(value).toLocaleString();
+                    return valor;
+                }} }
         });
         
         // Evento 'update' (Muestra el rango seleccionado)
