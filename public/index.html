@@ -141,6 +141,9 @@
                 },
                 from: function (value) {//esta funcion se llama para convertir y reconvertir el valor
                     if ("string" != typeof r){
+                        if (isNaN(Date.parse(value))) {
+                            return Number(value);
+                        }
                         return Date.parse(value);// Convierte el formato legible de nuevo a número
                     }
                     //si viene en formato numberico pasar a fecha
