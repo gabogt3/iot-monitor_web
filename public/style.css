@@ -5,7 +5,7 @@ body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f2f5; /* Fondo gris claro */
+    /* background-color: #f0f2f5; Fondo gris claro */
     color: #333;
     display: flex;
     flex-direction: column;
@@ -14,7 +14,7 @@ body {
 
 /* Encabezado */
 header {
-    background-color: #007bff; /* Color primario azul */
+    /*background-color: #007bff;  Color primario azul */
     color: white;
     padding: 20px 0;
     text-align: center;
@@ -47,11 +47,11 @@ header h1 {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    height: 50vh; /* Ocupa la mitad de la altura visible de la ventana */
-    max-height: 600px; /* Pero no más de 600px */
+    height: 60vh; /* Ocupa la mitad de la altura visible de la ventana */
+    max-height: 800px; /* Pero no más de 600px */
     
-    /* Asegura que el contenido (el canvas) no se desborde si la ventana es pequeña */
-    overflow: hidden; 
+    /* Asegura que el contenido (el canvas) no se desborde si la ventana es pequeña 
+    overflow: hidden; */
 }
 
 /* Estilos específicos para la regla del slider */
@@ -60,7 +60,7 @@ header h1 {
     padding: 15px 10px; 
     
     /* 2. Margen superior/inferior para separarlo de otros elementos */
-    margin: 20px 0; 
+    margin: 40px 80px; 
     
     /* 3. Asegura que la regla tenga una altura visible (ajusta si es necesario) */
     height: 30px; 
@@ -71,7 +71,7 @@ footer {
     text-align: center;
     background-color: #e9ecef;
     color: #6c757d;
-    margin-top: 20px;
+    margin-top: 30px;
     flex-shrink: 0; 
     background-image: url('footer.jpg');
     background-size: cover;
